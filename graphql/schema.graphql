@@ -1,0 +1,82 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime
+    @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"Indicates what fields are available at the top level of a query operation."
+type Query {
+    game(
+        "Search by primary key."
+        id: ID @eq @rules(apply: ["prohibits:name", "required_without:name"])
+
+        "Search by email address."
+        name: String
+            @eq
+            @rules(apply: ["prohibits:id", "required_without:id", "id"])
+    ): Game @find
+
+    games(name: String @where(operator: "like")): [Game!]!
+        @paginate(defaultCount: 10)
+
+    gameSessions(game_id: ID!): [GameSession!]! @paginate(defaultCount: 10)
+    gameStates: [GameState!]! @all
+}
+
+type Mutation {
+    createGame(input: CreateGameInput! @spread): Game! @create
+    updateGame(id: ID!, name: String, image: String): Game @update
+    deleteGame(id: ID! @whereKey): Game @delete
+    createGameCard(input: CreateGameCardInput! @spread): GameCard! @create
+    deleteGameCard(id: ID! @whereKey): GameCard! @delete
+    createGameSession(input: CreateGameSessionInput! @spread): GameSession!
+        @create
+}
+
+input CreateGameCardInput {
+    image: String!
+    game_id: ID!
+}
+
+input CreateGameInput {
+    name: String!
+    image: String!
+}
+
+input CreateGameSessionInput {
+    game_id: ID!
+    points: Int!
+    username: String!
+    state_id: ID!
+    deleted: Boolean!
+}
+
+type Game {
+    id: ID!
+    name: String!
+    image: String!
+    gameCards: [GameCard!]! @hasMany
+    gameSessions: [GameSession!]! @hasMany
+}
+
+type GameCard {
+    id: ID!
+    image: String!
+    game_id: ID!
+    game: Game @belongsTo
+}
+
+type GameSession {
+    id: ID!
+    game_id: ID!
+    points: Int!
+    username: String!
+    state: String!
+    deleted: Boolean!
+    created_at: DateTime!
+    updated_at: DateTime!
+    game: Game! @belongsTo
+}
+
+type GameState {
+    id: ID!
+    name: String!
+}
