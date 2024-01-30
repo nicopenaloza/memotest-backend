@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('game_sessions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('game_id')->constrained();
-            $table->integer('points');
-            $table->string('username');
-            $table->string('state');
+            $table->integer('points')->default(0);
+            $table->string('username')->default("");
+            $table->integer('state_id')->default(1);
             $table->boolean('deleted')->default(false);
             $table->timestamps();
         });

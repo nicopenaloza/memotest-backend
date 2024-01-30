@@ -5,19 +5,20 @@ scalar DateTime
 "Indicates what fields are available at the top level of a query operation."
 type Query {
     game(
-        "Search by primary key."
         id: ID @eq @rules(apply: ["prohibits:name", "required_without:name"])
-
-        "Search by email address."
         name: String
             @eq
             @rules(apply: ["prohibits:id", "required_without:id", "id"])
     ): Game @find
 
     games(name: String @where(operator: "like")): [Game!]!
-        @paginate(defaultCount: 10)
+        @paginate(defaultCount: 4)
 
-    gameSessions(game_id: ID!): [GameSession!]! @paginate(defaultCount: 10)
+    gameSession(id: ID! @eq): GameSession @find
+    gameSessions(game_id: ID): [GameSession!]! @paginate(defaultCount: 4)
+    closedGameSessions: [GameSession!]!
+        @all
+        @where(key: "state", operator: "eq", value: "Completed")
     gameStates: [GameState!]! @all
 }
 
@@ -31,24 +32,9 @@ type Mutation {
         @create
 }
 
-input CreateGameCardInput {
-    image: String!
-    game_id: ID!
-}
-
-input CreateGameInput {
-    name: String!
-    image: String!
-}
-
-input CreateGameSessionInput {
-    game_id: ID!
-    points: Int!
-    username: String!
-    state_id: ID!
-    deleted: Boolean!
-}
-
+"""
+Type Definitions
+"""
 type Game {
     id: ID!
     name: String!
@@ -69,7 +55,7 @@ type GameSession {
     game_id: ID!
     points: Int!
     username: String!
-    state: String!
+    state: String
     deleted: Boolean!
     created_at: DateTime!
     updated_at: DateTime!
@@ -79,4 +65,21 @@ type GameSession {
 type GameState {
     id: ID!
     name: String!
+}
+
+"""
+Input Definitions
+"""
+input CreateGameCardInput {
+    image: String!
+    game_id: ID!
+}
+
+input CreateGameInput {
+    name: String!
+    image: String!
+}
+
+input CreateGameSessionInput {
+    game_id: ID!
 }
