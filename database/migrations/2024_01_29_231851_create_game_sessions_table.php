@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('game_id')->constrained();
             $table->integer('points')->default(0);
             $table->string('username')->default("");
+            $table->integer('attempts')->default(0);
             $table->integer('state_id')->default(1);
             $table->boolean('deleted')->default(false);
             $table->timestamps();
