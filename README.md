@@ -31,7 +31,7 @@ Make sure you have the following installed before getting started:
 4. **Run Migrations and Seeders:**
 
    ```bash
-   php artisan migrate --seed
+   php artisan migrate
    ```
 
 5. **Start the Development Server:**
