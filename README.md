@@ -1,66 +1,192 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+**Laravel Project with Lighthouse - README**
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Memotest
 
-## About Laravel
+## Types
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Game
+- **Fields:**
+  - id: ID!
+  - name: String!
+  - image: String!
+  - gameCards: [GameCard!]! @hasMany
+  - gameSessions: [GameSession!]! @hasMany
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### GameCard
+- **Fields:**
+  - id: ID!
+  - image: String!
+  - game_id: ID!
+  - game: Game @belongsTo
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### GameSession
+- **Fields:**
+  - id: ID!
+  - game_id: ID!
+  - game: Game! @belongsTo
+  - points: Int!
+  - retries: Int!
+  - state: GameState
+  - numberOfPairs: Int!
+  - cards: [CardSession]
+  - updated_at: String!
 
-## Learning Laravel
+### GameState
+- **Fields:**
+  - id: ID!
+  - name: String!
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### CardSession
+- **Fields:**
+  - id: ID!
+  - card: GameCard!
+  - session: GameSession!
+  - active: Boolean!
+  - hidden: Boolean!
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Mutations
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **createMemo**
+   - **Arguments:** name, image, images
+   - **Returns:** Created Game
 
-## Laravel Sponsors
+2. **deleteMemo**
+   - **Arguments:** id
+   - **Returns:** Deleted Game
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. **removeImage**
+   - **Arguments:** id
+   - **Returns:** Removed Image from GameCard
 
-### Premium Partners
+4. **createImage**
+   - **Arguments:** game_id, image
+   - **Returns:** Created GameCard
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+5. **createGameSession**
+   - **Arguments:** game_id
+   - **Returns:** Created GameSession
 
-## Contributing
+6. **endGameSession**
+   - **Arguments:** id
+   - **Returns:** Ended GameSession
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+7. **updateAttempts**
+   - **Arguments:** id
+   - **Returns:** Updated GameSession
 
-## Code of Conduct
+8. **matchPair**
+   - **Arguments:** session_id, card_id
+   - **Returns:** Updated CardSession array
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Queries
 
-## Security Vulnerabilities
+1. **retrieveMemoTests**
+   - **Arguments:** name (optional)
+   - **Returns:** Array of Games
+   - **Pagination:** Default count of 4
+   - **Order By:** Updated_at (Descending)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+2. **retrieveMemoTest**
+   - **Arguments:** id
+   - **Returns:** Single Game
 
-## License
+3. **retrieveGameSession**
+   - **Arguments:** id
+   - **Returns:** Single GameSession
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+4. **retrieveGameSessions**
+   - **Arguments:** page
+   - **Returns:** Array of GameSessions
+   - **Pagination:** Default count of 4
+
+This schema provides a foundation for managing memory card games, including creating and deleting games, managing game sessions, and querying game data. It also incorporates features like pagination and ordering for enhanced functionality.
+
+## System Requirements
+
+Make sure you have the following installed before getting started:
+
+- PHP >= 8.2
+- Composer
+- Node.js and npm
+- MySQL or any other database management system compatible with Laravel
+- [Laravel](https://laravel.com/) installed globally
+
+## Project Setup
+
+1. **Clone the Repository:**
+
+   ```bash
+   git clone https://github.com/nicopenaloza/memotest-backend.git
+   cd memotest-backend
+   ```
+
+2. **Install Dependencies:**
+
+   ```bash
+   composer install
+   npm install
+   ```
+
+3. **Configure the Environment:**
+
+   - Copy the `.env.example` file and rename it to `.env`.
+   - Configure your database and other settings in the `.env` file.
+
+4. **Generate the Application Key:**
+
+   ```bash
+   php artisan key:generate
+   ```
+
+5. **Run Migrations and Seeders:**
+
+   ```bash
+   php artisan migrate --seed
+   ```
+
+6. **Start the Development Server:**
+
+   ```bash
+   php artisan serve
+   ```
+
+   The server will be available at [http://localhost:8000](http://localhost:8000).
+
+## Run Lighthouse
+
+1. **Install Lighthouse:**
+
+   ```bash
+   composer require nuwave/lighthouse
+   ```
+
+2. **Publish Lighthouse Configuration:**
+
+   ```bash
+   php artisan vendor:publish --tag=lighthouse-config
+   ```
+
+3. **Run Lighthouse Migration:**
+
+   ```bash
+   php artisan migrate
+   ```
+
+4. **Start the GraphQL Server:**
+
+   ```bash
+   php artisan serve
+   ```
+
+   The GraphQL server will be available at [http://localhost:8000/graphql](http://localhost:8000/graphql).
+
+## API Documentation
+
+The GraphQL API documentation generated by Lighthouse will be available at [http://localhost:8000/graphql](http://localhost:8000/graphql) when the server is running.
+
+## Additional Notes
+
+- You can customize the Lighthouse configuration according to your needs in the `config/lighthouse.php` file.
+- Make sure to check the [official Lighthouse documentation](https://lighthouse-php.com/) for more information on its features and configuration options.
+
+Ready to go! Now you should have your Laravel project with Lighthouse configured and ready for development. If you encounter any issues or have questions, refer to the official documentation or seek help in the Laravel and Lighthouse communities. Good luck with your project!
