@@ -28,19 +28,13 @@ Make sure you have the following installed before getting started:
    - Copy the `.env.example` file and rename it to `.env`.
    - Configure your database and other settings in the `.env` file.
 
-4. **Generate the Application Key:**
-
-   ```bash
-   php artisan key:generate
-   ```
-
-5. **Run Migrations and Seeders:**
+4. **Run Migrations and Seeders:**
 
    ```bash
    php artisan migrate --seed
    ```
 
-6. **Start the Development Server:**
+5. **Start the Development Server:**
 
    ```bash
    php artisan serve
