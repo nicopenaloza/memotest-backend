@@ -5,7 +5,6 @@ Make sure you have the following installed before getting started:
 
 - PHP >= 8.3.2
 - Composer
-- Node.js and npm
 - MySQL or any other database management system compatible with Laravel
 - [Laravel](https://laravel.com/) installed globally
 
@@ -22,7 +21,6 @@ Make sure you have the following installed before getting started:
 
    ```bash
    composer install
-   npm install
    ```
 
 3. **Configure the Environment:**
