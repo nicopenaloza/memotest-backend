@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('game_sessions', function (Blueprint $table) {
+        Schema::create('card_sessions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('game_id')->constrained();
-            $table->integer('retries')->default(0);
-            $table->integer('points')->default(0);
-            $table->integer('numberOfPairs')->default(0);
-            $table->foreignId('state_id')->default(1)->constrained('game_states');
+            $table->foreignId('card_id')->constrained('game_cards');
+            $table->foreignId('game_session_id')->constrained('game_sessions');
+            $table->boolean('active')->default(false);
+            $table->boolean('hidden')->default(false);
             $table->timestamps();
         });
+
     }
 
     /**
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('game_sessions');
+        Schema::dropIfExists('card_sessions');
     }
 };

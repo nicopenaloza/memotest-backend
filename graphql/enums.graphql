@@ -1,0 +1,4 @@
+enum State {
+    STARTED @enum(value: 1)
+    COMPLETED @enum(value: 2)
+}

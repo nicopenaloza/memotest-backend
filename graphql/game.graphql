@@ -1,0 +1,59 @@
+type Game {
+    id: ID!
+    name: String!
+    image: String!
+    gameCards: [GameCard!]! @hasMany
+    gameSessions: [GameSession!]! @hasMany
+}
+
+type GameCard {
+    id: ID!
+    image: String!
+    game_id: ID!
+    game: Game @belongsTo
+}
+
+type GameSession {
+    id: ID!
+    game_id: ID!
+    game: Game! @belongsTo
+    points: Int!
+    retries: Int!
+    state: GameState
+    numberOfPairs: Int!
+    cards: [CardSession]
+    updated_at: String!
+}
+
+type GameState {
+    id: ID!
+    name: String!
+}
+
+type CardSession {
+    id: ID!
+    card: GameCard!
+    session: GameSession!
+    active: Boolean!
+    hidden: Boolean!
+}
+
+extend type Mutation {
+    createMemo(name: String!, image: String!, images: [String]!): Game!
+    deleteMemo(id: ID!): Game
+    removeImage(id: ID!): GameCard
+    createImage(game_id: ID!, image: String!): GameCard! @create
+    createGameSession(game_id: ID!): GameSession!
+    endGameSession(id: ID!): GameSession
+    updateAttempts(id: ID!): GameSession!
+    matchPair(session_id: ID!, card_id: ID!): [CardSession!]!
+}
+
+extend type Query {
+    retrieveMemoTests(name: String @where(operator: "like")): [Game!]!
+        @paginate(defaultCount: 4)
+        @orderBy(column: "updated_at", direction: DESC)
+    retrieveMemoTest(id: ID! @eq): Game @find
+    retrieveGameSession(id: ID! @eq): GameSession @find
+    retrieveGameSessions(page: Int!): [GameSession!]! @paginate(defaultCount: 4)
+}
