@@ -1,5 +1,3 @@
-**Laravel Project with Lighthouse - README**
-
 # Memotest
 
 ## Types
